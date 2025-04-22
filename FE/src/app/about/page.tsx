@@ -5,7 +5,7 @@ import { useApi } from '../../contexts/apiProvider/apiContext'
 
 const About: React.FC = () => {
 
-  const [data, setData] = useState("");
+  const [data, setData] = useState<string>("");
 
   const api = useApi()
 

@@ -1,48 +1,50 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect , FC } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../contexts/authProvider/authContext";
 import "./signin.css"; // Custom CSS module
 
-interface errorObject {
+interface ErrorObject {
   email : string;
   password : string;
   message : string;
 }
 
-interface signInState {
+interface SignInState {
   email : string;
   password : string;
   loading : boolean;
 }
 
-const SignInPage = () => {
+export enum UserRole {
+  User = "user",
+  Admin = "admin",
+}
+
+const SignInPage: FC = () => {
   const { attemptAuth, myUserDetails, lastError } = useAuth();
-  const [state , setState] = useState<signInState>(null);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState<errorObject>({ email: "", password: "", messages: "" });
-  const [loading, setLoading] = useState(false);
+  const [state , setState] = useState<SignInState>({email: "", password: "", loading: false});
+  const [error, setError] = useState<ErrorObject>({ email: "", password: "", message: "" });
   const router = useRouter();
 
   const validateForm = () => {
     let isValid = true;
-    const newErrors = { email: "", password: "", messages: "" };
+    const newErrors : ErrorObject = { email: "", password: "", message: "" };
 
     // Email validation
-    if (!email.trim()) {
+    if (!state?.email.trim()) {
       newErrors.email = "Email is required";
       isValid = false;
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
+    } else if (!/\S+@\S+\.\S+/.test(state.email)) {
       newErrors.email = "Invalid email format";
       isValid = false;
     }
 
     // Password validation
-    if (!password.trim()) {
+    if (!state?.password.trim()) {
       newErrors.password = "Password is required";
       isValid = false;
-    } else if (password.length < 6) {
+    } else if (state?.password.length < 6) {
       newErrors.password = "Password must be at least 6 characters";
       isValid = false;
     }
@@ -58,41 +60,39 @@ const SignInPage = () => {
   const isUserLogin = () => {
     const token = localStorage.getItem("sessId");
     if (token) {
-      // setIsRedirect(true);
-      const role = localStorage.getItem("role");
-      // SetUserRole(typeof role == 'string' ?  role : "");
-      if(typeof role == 'string' && role =="user") router.push("/user-dashboard");
-      if(typeof role == 'string' && role =="admin") router.push("/admin-dashboard");
+      const role  = localStorage.getItem("role") as UserRole | null;
+      if(typeof role == 'string' && role == UserRole.User) router.push("/user-dashboard");
+      if(typeof role == 'string' && role == UserRole.Admin) router.push("/admin-dashboard");
     }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
+    setState({...state, loading: true});
 
     if (!validateForm()) {
-      setLoading(false);
+      setState({...state, loading: false});
       return;
     }
-    // setError({ email: "", password: "" });
+    const email = state?.email;
+    const password = state?.password;
 
     await attemptAuth(email, password);
-
-    setLoading(false);
+    setState({...state, loading: false});
   };
 
-  return (
+  return (  
     <div className="container">
       <div className="card">
-        <h2 className="title">Sign In</h2>
+        <h2 className="title">Sign In</h2>  
         {lastError && <p className="error">{lastError}</p>}
         <form onSubmit={handleSubmit}>
           <div className="inputGroup">
             <label>Email</label>
             <input
               type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={state?.email}
+              onChange={(e) => setState({...state, email: e.target.value})}
               required
               className="input"
             />
@@ -102,15 +102,15 @@ const SignInPage = () => {
             <label>Password</label>
             <input
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={state?.password}
+              onChange={(e) => setState({...state, password: e.target.value})}
               required
               className="input"
             />
             {error.password && <p className="error">{error.password}</p>}
           </div>
-          <button type="submit" className="button" disabled={loading}>
-            {loading ? "Signing in..." : "Sign In"}
+          <button type="submit" className="button" disabled={state?.loading}>
+            {state?.loading ? "Signing in..." : "Sign In"}
           </button>
         </form>
       </div>

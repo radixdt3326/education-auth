@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState , FC } from "react";
 import { useRouter } from "next/navigation";
 import { isUserloggedIn } from "@/utils/isLoggedin";
 import { useAuth } from "@/contexts/authProvider/authContext";
 import { useApi } from '@/contexts/apiProvider/apiContext'
 import "./user-dashboard.css"
 
-const Dashboard = () => {
+const Dashboard:FC = () => {
   const router = useRouter();
   const [user, setUser] = useState<any | null>(null);
   const { logout } = useAuth();
