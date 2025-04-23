@@ -4,16 +4,14 @@ import { useState, useEffect, ReactNode } from "react";
 import { AuthContext } from "./authContext";
 // import googleEvent from "./googleEvent";
 import api from "../../utils/api";
+import { ApiProviderProps } from "@/types/type";
 // import * as cacher from "./cacher";
 
 const getUserIdent = (userDetails: any) => {
   return userDetails ? `${userDetails.email}//${userDetails.school}` : null;
 };
 
-interface AuthProviderProps {
-  children: ReactNode;
-}
-export const AuthProvider = ({ children }: AuthProviderProps) => {
+export const AuthProvider = ({ children }: ApiProviderProps) => {
   const [myUserDetails, setMyUserDetails] = useState<any>("");
   const [lastError, setLastError] = useState<any>(null);
   const [inited, setInited] = useState<boolean>(false);
@@ -35,7 +33,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const logout = (cb:()=>void) => {
     api("POST" , "auth/logout")
-      .then((result: any) => {
+      .then(() => {
         cb();
         _doLocalLogout();
       })
@@ -53,7 +51,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         localStorage.setItem('role', result.userrole);
         setLastError(null);
       })
-      .catch((err: any) => {
+      .catch((err: Error) => {
         // cacher.clearAll();
         setMyUserDetails(null);
         setLastError(err.message);
@@ -75,7 +73,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         setLastError(null)
         setInited(true);
       })
-      .catch((err: any) => {
+      .catch((err:Error ) => {
         if (oldUserIdent !== getUserIdent(null)) {
         //   cacher.clearAll();
         }

@@ -2,14 +2,15 @@
 
 import { useState, useEffect, useRef, ReactNode } from "react";
 import ApiContext, { useApi } from "./apiContext";
-import api from "../../utils/api";
+import api  from "../../utils/api";
 import { useAuth } from "../authProvider/authContext";  // Using the updated AuthContext
+import { ApiProviderProps, requestBody } from "@/types/type";
 
 const AUTH_RETRY_INTERVAL_MS = 60000;
 
-interface ApiProviderProps {
-  children: ReactNode;
-}
+
+
+type ApiMethod = "GET" | "POST" | "PUT" | "DELETE";
 
 export const ApiProvider = ({ children }: ApiProviderProps) => {
   const { myUserDetails, attemptReauth } = useAuth();
@@ -31,7 +32,7 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
     }
   }, [myUserDetails]);
 
-  const doReauthTimeout = () => {
+  const doReauthTimeout = () :void => {
     if (authTimeoutRef.current) {
       clearTimeout(authTimeoutRef.current);
     }
@@ -43,22 +44,18 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
     }
   };
 
-  const apiWrapper = (...args: any[]) => {
+
+
+  const apiWrapper = (method: ApiMethod, endpoint: string, data?: requestBody) => {
     return new Promise((resolve, reject) => {
-      api(...args)
+      api(method, endpoint, data)
         .then(resolve)
-        .catch((err) => {
-
-          if (err === "_ERROR_ :: cannot copy" && isMounted) {
-            // doReauthTimeout();
-            // attemptReauth();
-          }  // based on need
-
+        .catch((err:Error) => {
 
           localStorage.removeItem("sessId");
           localStorage.removeItem("userId");
           localStorage.removeItem("role");
-          window.location = "/";
+          window.location.href = "/";
           reject(err);
         });
     });

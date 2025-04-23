@@ -3,23 +3,9 @@ import { useState, useEffect , FC } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../contexts/authProvider/authContext";
 import "./signin.css"; // Custom CSS module
+import { ErrorObject, SignInState, UserRole } from "@/types/type";
 
-interface ErrorObject {
-  email : string;
-  password : string;
-  message : string;
-}
 
-interface SignInState {
-  email : string;
-  password : string;
-  loading : boolean;
-}
-
-export enum UserRole {
-  User = "user",
-  Admin = "admin",
-}
 
 const SignInPage: FC = () => {
   const { attemptAuth, myUserDetails, lastError } = useAuth();

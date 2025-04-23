@@ -1,8 +1,9 @@
+import { requestBody } from "@/types/type";
 import apiBaseOrigin from "./apiBaseOrigin";
 import axios from 'axios';
 
 
-export default async function(method : string, endpoint : string, data : object){
+export default async function<T>(method : string, endpoint : string, data? : requestBody):Promise<T>{
 	const config = {
 		method: method,
 		url: apiBaseOrigin + endpoint,
@@ -21,7 +22,7 @@ export default async function(method : string, endpoint : string, data : object)
 		return res.data;
 
 
-	}catch(err){
+	}catch(err : any){
 		return Promise.reject({
 			message : err.response.data.message
 		})

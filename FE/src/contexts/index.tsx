@@ -2,12 +2,10 @@
 import {ReactNode} from 'react'
 import { AuthProvider } from './authProvider/authProvide'
 import { ApiProvider } from './apiProvider/apiProvider'
+import { ApiProviderProps } from '@/types/type';
 
-interface AuthProviderProps {
-    children: ReactNode;
-  }
 
-export function Providers({ children } : AuthProviderProps) {
+export function Providers({ children } : ApiProviderProps) {
     return (
 
         <AuthProvider>
