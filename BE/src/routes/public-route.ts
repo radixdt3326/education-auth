@@ -4,7 +4,7 @@ const router = express.Router();
 import pool from '../Db_connection/dbConfig';
 
 
-router.get("/about", (req,res)=> getAboutData(req,res,pool));
+router.get("/about", (req : express.Request,res:express.Response)=> getAboutData(req,res,pool));
 
 
 export default router;

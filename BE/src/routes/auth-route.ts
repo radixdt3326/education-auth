@@ -9,9 +9,9 @@ const router = express.Router();
 
 
 
-router.post("/signin",  (req,res)=> signIn(req,res,pool) );
-router.post("/register", (req,res)=> register(req,res,pool));
-router.post("/logout", (req,res)=> logout(req,res,pool));
-router.post("/reauth", (req,res)=> reauthentication(req,res,pool));
+router.post("/signin",  (req : express.Request,res: express.Response)=> signIn(req,res,pool) );
+router.post("/register", (req : express.Request,res: express.Response)=> register(req,res,pool));
+router.post("/logout", (req : express.Request,res: express.Response)=> logout(req,res,pool));
+router.post("/reauth", (req : express.Request,res: express.Response)=> reauthentication(req,res,pool));
 
 export default router;
