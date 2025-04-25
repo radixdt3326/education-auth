@@ -33,7 +33,7 @@ jobs:
 
       - name: Build and tag Docker image
         run: |
-          docker build -t ghcr.io/${{ github.repository }}-frontend:${IMAGE_TAG} .
+          docker build -t ghcr.io/${{ github.repository }}-frontend:${IMAGE_TAG} FE/
           docker tag ghcr.io/${{ github.repository }}-frontend:${IMAGE_TAG} ghcr.io/${{ github.repository }}-frontend:latest
 
       - name: Push Docker images to GHCR
