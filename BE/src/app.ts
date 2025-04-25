@@ -8,8 +8,8 @@ import helmet from "helmet";
 import rateLimit from 'express-rate-limit';
 import cron from "node-cron";
 import cors from 'cors';
-import { toNodeHandler } from "better-auth/node";
-import { auth } from './lib/auth';
+// import { toNodeHandler } from "better-auth/node";
+// import { auth } from './lib/auth';
 
 import { handleError } from './helpers/error';
 import httpLogger from './middlewares/httpLogger';
@@ -79,7 +79,7 @@ app.use(express.urlencoded({ extended: false }));
 
 
 
-app.all("/api/auth/sign-in/social",  toNodeHandler(auth)); 
+// app.all("/api/auth/sign-in/social",  toNodeHandler(auth)); 
 app.use('/api', router);
 
 app.post("/api/auth", (req,res)=>console.log(req))
