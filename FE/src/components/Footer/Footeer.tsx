@@ -1,6 +1,7 @@
 
+import { JSX } from 'react';
 import './footer.css'
-const Footer :  React.FC = () => {
+const Footer :  React.FC = ()  :JSX.Element => {
     return (
       <footer>
         <div className="footer-content">

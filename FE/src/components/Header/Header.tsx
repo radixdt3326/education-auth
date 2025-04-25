@@ -1,10 +1,10 @@
 "use client";
-import { useState } from 'react';
+import { JSX, useState } from 'react';
 import Link from 'next/link';
 import "./header.css";
 import React from 'react';
 
-const Header: React.FC = () => {
+const Header: React.FC = ():JSX.Element => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
   // Toggle the mobile menu

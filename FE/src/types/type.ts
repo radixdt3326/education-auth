@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { JSX, ReactNode } from "react";
 
 export interface ErrorObject {
     email : string;
@@ -38,4 +38,5 @@ export interface ErrorObject {
   export interface requestBody{
 	email : string
 	password : string
-}
+  }
+

@@ -1,17 +1,18 @@
 "use client";
-import { useState, useEffect , FC } from "react";
+import { useState, useEffect , FC, JSX } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../contexts/authProvider/authContext";
 import "./signin.css"; // Custom CSS module
-import { ErrorObject, SignInState, UserRole } from "@/types/type";
+import { AuthContextType, ErrorObject, SignInState, UserRole } from "@/types/type";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 
 
-const SignInPage: FC = () => {
-  const { attemptAuth, myUserDetails, lastError } = useAuth();
+const SignInPage: FC = ():JSX.Element => {
+  const { attemptAuth, myUserDetails, lastError } : Pick<AuthContextType, 'attemptAuth' | 'myUserDetails' | 'lastError'>  = useAuth();
   const [state , setState] = useState<SignInState>({email: "", password: "", loading: false});
   const [error, setError] = useState<ErrorObject>({ email: "", password: "", message: "" });
-  const router = useRouter();
+  const router : AppRouterInstance = useRouter();
 
   const validateForm = () => {
     let isValid = true;

@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useEffect, useRef, ReactNode } from "react";
-import ApiContext, { useApi } from "./apiContext";
+import ApiContext from "./apiContext";
 import api  from "../../utils/api";
 import { useAuth } from "../authProvider/authContext";  // Using the updated AuthContext
-import { ApiProviderProps, requestBody } from "@/types/type";
+import { ApiProviderProps, AuthContextType, requestBody } from "@/types/type";
 
 const AUTH_RETRY_INTERVAL_MS = 60000;
 
@@ -13,7 +13,7 @@ const AUTH_RETRY_INTERVAL_MS = 60000;
 type ApiMethod = "GET" | "POST" | "PUT" | "DELETE";
 
 export const ApiProvider = ({ children }: ApiProviderProps) => {
-  const { myUserDetails, attemptReauth } = useAuth();
+  const { myUserDetails, attemptReauth } : Pick<AuthContextType, 'attemptReauth' | 'myUserDetails' >  = useAuth();
   const [isMounted, setIsMounted] = useState(false);
   const authTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 

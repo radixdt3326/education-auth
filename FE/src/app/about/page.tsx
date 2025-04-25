@@ -1,9 +1,9 @@
 'use client'
 import "./about.css";
-import React, { useEffect, useState } from "react";
+import React, { JSX, useEffect, useState } from "react";
 import { useApi } from '../../contexts/apiProvider/apiContext'
 
-const About: React.FC = () => {
+const About: React.FC = ():JSX.Element => {
 
   const [data, setData] = useState<string>("");
 

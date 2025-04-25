@@ -1,21 +1,22 @@
 "use client";
 
-import { useEffect, useState , FC } from "react";
+import { useEffect, useState , FC, JSX } from "react";
 import { useRouter } from "next/navigation";
 import { isUserloggedIn } from "@/utils/isLoggedin";
 import { useAuth } from "@/contexts/authProvider/authContext";
 import { useApi } from '@/contexts/apiProvider/apiContext'
 import "./user-dashboard.css"
-import { myUserDetails } from "@/types/type";
+import { AuthContextType, myUserDetails } from "@/types/type";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
-const Dashboard:FC = () => {
-  const router = useRouter();
+const Dashboard:FC = ():JSX.Element => {
+  const router : AppRouterInstance = useRouter();
   const [user, setUser] = useState<myUserDetails | null>(null);
-  const { logout } = useAuth();
+  const { logout } : Pick<AuthContextType, 'logout' > = useAuth();
 
   const api = useApi()
 
-  const getData = async () => {
+  const getData = async () : Promise<void> => {
     const result:myUserDetails = await api("GET", "user/user-dashboard/" + localStorage.getItem("userId"));
     setUser(result);
   }

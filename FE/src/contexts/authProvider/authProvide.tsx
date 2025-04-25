@@ -1,17 +1,18 @@
 "use client";
 
-import { useState, useEffect, ReactNode } from "react";
+import { useState, useEffect, ReactNode, JSX } from "react";
 import { AuthContext } from "./authContext";
 // import googleEvent from "./googleEvent";
 import api from "../../utils/api";
 import { ApiProviderProps } from "@/types/type";
+import { jsx } from "react/jsx-runtime";
 // import * as cacher from "./cacher";
 
 const getUserIdent = (userDetails: any) => {
   return userDetails ? `${userDetails.email}//${userDetails.school}` : null;
 };
 
-export const AuthProvider = ({ children }: ApiProviderProps) => {
+export const AuthProvider = ({ children }: ApiProviderProps) : JSX.Element => {
   const [myUserDetails, setMyUserDetails] = useState<any>("");
   const [lastError, setLastError] = useState<any>(null);
   const [inited, setInited] = useState<boolean>(false);
@@ -40,7 +41,7 @@ export const AuthProvider = ({ children }: ApiProviderProps) => {
       .catch(_doLocalLogout);
   };
 
-  const attemptAuth = (email: string, password: string) => {
+  const attemptAuth = (email: string, password: string)=> {
     api( "POST" , "auth/signin", { email, password })
       .then((result: any) => {
         // cacher.clearAll();
