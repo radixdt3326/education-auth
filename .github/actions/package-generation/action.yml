@@ -39,7 +39,7 @@ runs:
 
     - name: Build and tag Docker image
       run: |
-        docker build -t ghcr.io/${{ github.repository }}-${{ inputs.tagname }}:${IMAGE_TAG} "./${{ inputs.folder }}"
+        docker build -t ghcr.io/${{ github.repository }}-${{ inputs.tagname }}:${IMAGE_TAG} "../../../${{ inputs.folder }}"
         docker tag ghcr.io/${{ github.repository }}-${{ inputs.tagname }}:${IMAGE_TAG} ghcr.io/${{ github.repository }}-${{ inputs.tagname }}:latest
       shell: bash
 
