@@ -10,6 +10,9 @@ inputs:
     description: 'Provide tag name'
     required: true
     default: frontend
+  token:
+    description: 'GitHub token to push image'
+    required: true
 
 outputs:
   used-cache:
@@ -28,7 +31,7 @@ runs:
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+        password: ${{ inputs.token }}
 
     - name: Set image tag
       id: vars
