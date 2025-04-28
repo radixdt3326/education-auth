@@ -2,10 +2,11 @@
 // const getLookup = require("./common/getLookup");
 import { getLookup } from '../utils/getLookup';
 import express from 'express';
+import { Pool } from 'pg';
 
 let lookup : any = null;
 
-export const loginAttempt = async function login(DB  : any, email : string, req: express.Request, res : express.Response ,isSuccessfulLogin : boolean , additional_info : string) {
+export const loginAttempt = async function login(DB  : Pool, email : string, req: express.Request, res : express.Response ,isSuccessfulLogin : boolean , additional_info : string) {
 	if (!lookup) {
 		lookup = await getLookup();
 		if (!lookup) {

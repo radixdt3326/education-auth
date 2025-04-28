@@ -4,6 +4,7 @@ import { loginAttempt } from '../helpers/loginAttempts';
 import insertSessionData from '../helpers/insertSessionData';
 import { isEmail, nonEmptyStr, validatePassword, genPasswordHash, removeToken } from '../utils/common';
 import { getSessionData } from '../utils/common';
+import { Pool, QueryResult } from 'pg';
 
 /**
  * @swagger
@@ -68,7 +69,7 @@ import { getSessionData } from '../utils/common';
  *                 
  */
 
-export const signIn = async (req: express.Request, res: express.Response, DB: any) => {
+export const signIn = async (req: express.Request, res: express.Response, DB: Pool) => {
     const { email, password } = req.body;
 
     const isEmailValidate = isEmail(email, "Email");
@@ -93,7 +94,7 @@ export const signIn = async (req: express.Request, res: express.Response, DB: an
             email = $1
             AND attempt_date >= NOW() - INTERVAL '1 minute'
     `;
-    let attemptsResult: any = ""
+    let attemptsResult: QueryResult
     try {
         // Execute the query
         attemptsResult = await DB.query(loginquery, [Email]);
@@ -119,7 +120,7 @@ export const signIn = async (req: express.Request, res: express.Response, DB: an
         WHERE
             email = $1
     `;
-    let result: any = ""
+    let result: QueryResult 
     try {
         result = await DB.query(userquery, [Email]);
 
@@ -169,7 +170,7 @@ export const signIn = async (req: express.Request, res: express.Response, DB: an
         })
 }
 
-export const register = async (req: express.Request, res: express.Response, DB: any) => {
+export const register = async (req: express.Request, res: express.Response, DB: Pool) => {
 
     const { email, password, confirmpassword } = req.body;
 
@@ -216,7 +217,7 @@ export const register = async (req: express.Request, res: express.Response, DB: 
     return res.status(200).json({ message: "User is created with provided credential" })
 }
 
-export const logout = async (req: express.Request, res: express.Response, DB: any) => {
+export const logout = async (req: express.Request, res: express.Response, DB: Pool) => {
 
     const headerData = req.headers;
 
@@ -230,7 +231,7 @@ export const logout = async (req: express.Request, res: express.Response, DB: an
 
 }
 
-export const reauthentication = async (req: express.Request, res: express.Response, DB: any) => {
+export const reauthentication = async (req: express.Request, res: express.Response, DB: Pool) => {
     try {
         // here we can add many checks and layer of security;
         const heaaderData = req.headers;

@@ -1,4 +1,5 @@
 import express from 'express';
+import { Pool } from 'pg';
 import { isSafeInput } from '../utils/common';
 /**
  * @swagger
@@ -63,7 +64,7 @@ import { isSafeInput } from '../utils/common';
  * expect(res.json).toHaveBeenCalledWith({ userID: 1, userrole: 'admin', useremail: 'test@test.com', date_created: expect.any(Date) });
  * ```
  */
-export const getAdminDashboard = async (req: express.Request, res: express.Response, DB : any) => {
+export const getAdminDashboard = async (req: express.Request, res: express.Response, DB : Pool) => {
     // Input validation
     const { id } = req.params;
     const isuserIdValid = isSafeInput(id);

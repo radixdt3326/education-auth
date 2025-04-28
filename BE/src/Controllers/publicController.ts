@@ -1,4 +1,5 @@
 import express from 'express';
+import { Pool } from 'pg';
 
 /**
  * @swagger
@@ -22,6 +23,6 @@ import express from 'express';
  *                 
  */
 
-export const getAboutData = async (req: express.Request, res: express.Response, DB : any) => {
+export const getAboutData = async (req: express.Request, res: express.Response, DB : Pool) => {
    res.status(200).json({message : "This is educaation site!"})
 }

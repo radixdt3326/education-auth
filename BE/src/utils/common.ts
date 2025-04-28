@@ -1,6 +1,7 @@
 import * as EmailValidator from 'email-validator';
 import crypto from "crypto";
 import util from "util";
+import { Pool } from 'pg';
 
 export const isEmail = (value : string, name : string) => {
     if (!value) {
@@ -63,7 +64,7 @@ export const genPasswordHash = async function (password : string) {
 		algo: algo,
 	};
 };
-export const removeToken = async function (DB : any ,sessionId : string) {
+export const removeToken = async function (DB : Pool ,sessionId : string) {
 	try {
         const query = `DELETE FROM session_table WHERE token = $1 RETURNING *;`;
         const result = await DB.query(query, [JSON.parse(sessionId)]);
@@ -80,7 +81,7 @@ export const removeToken = async function (DB : any ,sessionId : string) {
     }
 };
 
-export const getSessionData = async function (DB : any ,sessionId : any) {
+export const getSessionData = async function (DB : Pool ,sessionId : string) {
 	try {
         const result = await DB.query('SELECT * FROM session_table where token = $1', [sessionId]);
 		// console.log(result);
@@ -96,7 +97,7 @@ export const getSessionData = async function (DB : any ,sessionId : any) {
 };
 
 
-export const getUserData = async function (DB : any ,userId : any) {
+export const getUserData = async function (DB : Pool ,userId : string) {
 	try {
 		const result = await DB.query('SELECT * FROM user_table where id = $1', [userId]);;
 		// console.log(result);
@@ -116,7 +117,7 @@ export const isSafeInput = (input : string) => {
     return !scriptRegex.test(input);
 };
 
-export const removeExpiredSession =  async(DB:any)=>{
+export const removeExpiredSession =  async(DB:Pool)=>{
 	try {
         const query = `DELETE FROM session_table WHERE expiry_date <= NOW() RETURNING *;`;
         const result = await DB.query(query);

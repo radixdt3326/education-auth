@@ -1,4 +1,5 @@
 import express from 'express';
+import { Pool } from 'pg';
 import { isEmail, isSafeInput } from '../utils/common';
 
 /**
@@ -36,7 +37,7 @@ import { isEmail, isSafeInput } from '../utils/common';
  *                 
  */
 
-export const getUserDashboard = async (req: express.Request, res: express.Response, DB: any) => {
+export const getUserDashboard = async (req: express.Request, res: express.Response, DB: Pool) => {
 
     // Input validation
 
