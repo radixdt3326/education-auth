@@ -3,17 +3,17 @@ description: 'Will build and push image into GitHub Container Registry'
 
 inputs:
   folder:
-    description: 'Please provide folder path'
+    description: 'Provide folder path'
     required: true
     default: FE
   tagname:
-    description: 'Please provide tag name'
+    description: 'Provide tag name'
     required: true
     default: frontend
 
 outputs:
   used-cache:
-    description: 'Cache was used or not.'
+    description: 'Output Message'
     value: ${{ steps.output.outputs.cache }}
 
 runs:
@@ -35,20 +35,22 @@ runs:
     - name: Set image tag
       id: vars
       run: echo "IMAGE_TAG=${GITHUB_SHA::7}" >> $GITHUB_ENV
+      shell: bash
 
     - name: Build and tag Docker image
       run: |
-        docker build -t ghcr.io/${{ github.repository }}-${{ inputs.tagname }}:${IMAGE_TAG} ${{ inputs.folder }}/
+        docker build -t ghcr.io/${{ github.repository }}-${{ inputs.tagname }}:${IMAGE_TAG} "${{ inputs.folder }}"
         docker tag ghcr.io/${{ github.repository }}-${{ inputs.tagname }}:${IMAGE_TAG} ghcr.io/${{ github.repository }}-${{ inputs.tagname }}:latest
+      shell: bash
 
     - name: Push Docker images to GHCR
       run: |
         docker push ghcr.io/${{ github.repository }}-${{ inputs.tagname }}:${IMAGE_TAG}
         docker push ghcr.io/${{ github.repository }}-${{ inputs.tagname }}:latest
+      shell: bash
 
     - name: Output Message
       id: output
       run: |
-        npm ci
         echo "cache=package created successfully" >> $GITHUB_OUTPUT
       shell: bash
