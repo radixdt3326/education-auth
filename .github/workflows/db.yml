@@ -16,24 +16,14 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-        
-      - name: Log in to GHCR
-        uses: docker/login-action@v3
+
+      - name: Build & Create Package
+        id: build-docker-image
+        uses: ./.github/actions/package-generation
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          folder: 'db'
+          tagname: 'database'
+          token: ${{ secrets.GITHUB_TOKEN }}  
 
-      - name: Set image tag
-        run: echo "IMAGE_TAG=${GITHUB_SHA::7}" >> $GITHUB_ENV
 
-      - name: Build and tag Docker image
-        run: |
-          docker build -t ghcr.io/${{ github.repository }}-database:${IMAGE_TAG} Db/
-          docker tag ghcr.io/${{ github.repository }}-database:${IMAGE_TAG} ghcr.io/${{ github.repository }}-database:latest
-
-      - name: Push Docker images to GHCR
-        run: |
-          docker push ghcr.io/${{ github.repository }}-database:${IMAGE_TAG}
-          docker push ghcr.io/${{ github.repository }}-database:latest       
 
