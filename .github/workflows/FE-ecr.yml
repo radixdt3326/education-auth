@@ -22,7 +22,7 @@ jobs:
           tagname: 'frontend'
           token: ${{ secrets.GITHUB_TOKEN }}  # Pass the token here
           aws-region: 'us-east-2'
-          ecr-repo: ${{AWS_ECR_REPO}}
+          ecr-repo: ${{secrets.AWS_ECR_REPO}}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
