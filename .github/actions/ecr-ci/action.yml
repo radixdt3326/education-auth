@@ -38,6 +38,7 @@ runs:
         echo ${{ inputs.aws-secret-access-key }}
         echo ${{ inputs.aws-region }}
         echo ${{ inputs.ecr-repo }}
+      shell: bash
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v2
@@ -45,12 +46,15 @@ runs:
         aws-access-key-id: ${{ inputs.aws-access-key-id }}
         aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
         aws-region: ${{ inputs.aws-region }}
+      shell: bash
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
+      shell: bash
 
     - name: Login to Amazon ECR
       uses: aws-actions/amazon-ecr-login@v1
+      shell: bash
 
     - name: Set image tag and ECR URI
       id: vars
