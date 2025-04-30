@@ -1,6 +1,6 @@
 import { Pool } from "pg";
 
-async function insertSessionData(DB: Pool, userId: string, data: Pool) {
+async function insertSessionData(DB: Pool, userId: string, data:Record<string,unknown>) {
 
     try {
         const query = `

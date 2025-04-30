@@ -1,0 +1,73 @@
+name: 'Build and Push Docker Image to AWS ECR'
+description: 'Builds Docker image and pushes it to AWS ECR'
+
+inputs:
+  folder:
+    description: 'Provide folder path'
+    required: true
+    default: FE
+  tagname:
+    description: 'Provide tag name'
+    required: true
+    default: frontend
+  aws-region:
+    description: 'AWS Region'
+    required: true
+  ecr-repo:
+    description: 'ECR repository name'
+    required: true
+  aws-access-key-id:
+    description: 'AWS Access Key ID'
+    required: true
+  aws-secret-access-key:
+    description: 'AWS Secret Access Key'
+    required: true
+
+outputs:
+  used-cache:
+    description: 'Output Message'
+    value: ${{ steps.output.outputs.cache }}
+
+runs:
+  using: 'composite'
+  steps:
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ inputs.aws-access-key-id }}
+        aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
+        aws-region: ${{ inputs.aws-region }}
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Login to Amazon ECR
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Set image tag and ECR URI
+      id: vars
+      run: |
+        IMAGE_TAG=${GITHUB_SHA::7}
+        ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+        ECR_URI="$ACCOUNT_ID.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com/${{ inputs.ecr-repo }}"
+        echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
+        echo "ECR_URI=$ECR_URI" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Build Docker Image
+      run: |
+        docker build -t $ECR_URI:${IMAGE_TAG} "${{ inputs.folder }}"
+        docker tag $ECR_URI:${IMAGE_TAG} $ECR_URI:latest
+      shell: bash
+
+    - name: Push Docker Image to ECR
+      run: |
+        docker push $ECR_URI:${IMAGE_TAG}
+        docker push $ECR_URI:latest
+      shell: bash
+
+    - name: Output Message
+      id: output
+      run: echo "cache=package created successfully" >> $GITHUB_OUTPUT
+      shell: bash
