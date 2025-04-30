@@ -240,7 +240,7 @@ export const reauthentication = async (req: express.Request, res: express.Respon
             return res.status(400).json({ message: "anAuthorize" })
         }
 
-        const sessionData = await getSessionData(DB, heaaderData["x-sessid"])
+        const sessionData = await getSessionData(DB, heaaderData["x-sessid"] as string)
 
         if (!sessionData) return res.status(403).json({ message: "forbidden User is not logged In" })
 
