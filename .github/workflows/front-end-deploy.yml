@@ -1,38 +1,30 @@
-name: Deploy Frontend to EC2
+name: Deploy Frontend from ECR to EC2
 
 on:
   workflow_dispatch:
 
 jobs:
-  deploy-frontend:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.9.0
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@v0.1.10
         with:
-          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user                # or ubuntu for Ubuntu AMIs
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script: |
 
-      - name: Deploy to EC2
-        run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@<YOUR_EC2_PUBLIC_IP> << 'EOF'
+            aws ecr get-login-password --region us-east-2 | \
+              docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-2.amazonaws.com
 
-            echo "Logging into GHCR"
-            echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            # Stop and remove existing container on port 80 (optional)
+            docker ps -q --filter "publish=80" | grep -q . && docker stop $(docker ps -q --filter "publish=80") || echo "No container on port 80"
+            docker ps -a -q --filter "publish=80" | grep -q . && docker rm $(docker ps -a -q --filter "publish=80") || echo "No stopped container on port 80"
 
-            echo "Pulling latest image"
-            docker pull ghcr.io/${{ github.repository }}-frontend:latest
+            # Pull the latest image
+            docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-2.amazonaws.com/${{secrets.AWS_ECR_REPO}}:latest
 
-            echo "Stopping old container (if exists)"
-            docker rm -f frontend-container || true
-
-            echo "Running new container"
-            docker run -d \
-              --name frontend-container \
-              -p 3000:3000 \
-              ghcr.io/${{ github.repository }}-frontend:latest
-
-          EOF
+            # Run the container on port 80
+            docker run -d -p 80:3000 ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-2.amazonaws.com/${{secrets.AWS_ECR_REPO}}:latest

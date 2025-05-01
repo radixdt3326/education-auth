@@ -71,7 +71,7 @@ const SignInPage: FC = ():JSX.Element => {
   return (  
     <div className="container">
       <div className="card">
-        <h2 className="title">Sign In</h2>  
+        <h2 className="title">Sign In as user</h2>  
         {lastError && <p className="error">{lastError}</p>}
         <form onSubmit={handleSubmit}>
           <div className="inputGroup">
