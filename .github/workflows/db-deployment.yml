@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy-backend:
+  deploy-database:
     runs-on: ubuntu-latest
 
     steps:
@@ -38,5 +38,4 @@ jobs:
               -e POSTGRES_USER=admin \
               -e POSTGRES_PASSWORD=adminpassword \
               -e POSTGRES_DB=my_database \
-              -p 3000:5432 \
               ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-2.amazonaws.com/${{ secrets.AWS_ECR_DB_REPO }}:latest
