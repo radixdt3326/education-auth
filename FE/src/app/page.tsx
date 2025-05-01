@@ -5,14 +5,17 @@ import { useAuth } from "../contexts/authProvider/authContext";
 import "./signin.css"; // Custom CSS module
 import { AuthContextType, ErrorObject, SignInState, UserRole } from "@/types/type";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { useApi } from "@/contexts/apiProvider/apiContext";
 
 
 
 const SignInPage: FC = ():JSX.Element => {
   const { attemptAuth, myUserDetails, lastError } : Pick<AuthContextType, 'attemptAuth' | 'myUserDetails' | 'lastError'>  = useAuth();
+  const api = useApi()
   const [state , setState] = useState<SignInState>({email: "", password: "", loading: false});
   const [error, setError] = useState<ErrorObject>({ email: "", password: "", message: "" });
   const router : AppRouterInstance = useRouter();
+  const [data,setData] = useState<string>('');
 
   const validateForm = () => {
     let isValid = true;
@@ -40,6 +43,11 @@ const SignInPage: FC = ():JSX.Element => {
     return isValid;
   };
 
+  const getData = async () : Promise<void> => {
+    const result = await api("/");
+    console.log(result);
+  }
+  getData();
   useEffect(() => {
     isUserLogin()
   }, [JSON.stringify(myUserDetails)])
