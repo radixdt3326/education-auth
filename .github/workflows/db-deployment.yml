@@ -12,16 +12,15 @@ jobs:
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.EC2_HOST }}
-          username: ec2-user                # or ubuntu for Ubuntu AMIs
+          username: ec2-user           
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
-
             aws ecr get-login-password --region us-east-2 | \
               docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-2.amazonaws.com
 
-           # Stop and remove container named 'my-database' if it exists
-           docker ps -q --filter "name=my-database" | grep -q . && docker stop my-database || echo "No running container named 'my-database'"
-           docker ps -a -q --filter "name=my-database" | grep -q . && docker rm my-database || echo "No stopped container named 'my-database'"
+            # Stop and remove container named 'my-database' if it exists
+            docker ps -q --filter "name=my-database" | grep -q . && docker stop my-database || echo "No running container named 'my-database'"
+            docker ps -a -q --filter "name=my-database" | grep -q . && docker rm my-database || echo "No stopped container named 'my-database'"
 
             # Remove all the unused images
             docker image prune -a -f
@@ -29,8 +28,15 @@ jobs:
             # Remove all unused containers
             docker container prune -f
 
-            # Pull the latest image
-            docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-2.amazonaws.com/${{secrets.AWS_ECR_DB_REPO}}:latest
+            # Pull the latest image from ECR
+            docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-2.amazonaws.com/${{ secrets.AWS_ECR_DB_REPO }}:latest
 
-            # Run the container on port 80
-            docker run -d -p 3000:5000 --name my-database --network app-network  -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=adminpassword -e POSTGRES_DB=my_database ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-2.amazonaws.com/${{secrets.AWS_ECR_DB_REPO}}:latest
+            # Run the container
+            docker run -d \
+              --name my-database \
+              --network app-network \
+              -e POSTGRES_USER=admin \
+              -e POSTGRES_PASSWORD=adminpassword \
+              -e POSTGRES_DB=my_database \
+              -p 3000:5432 \
+              ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-2.amazonaws.com/${{ secrets.AWS_ECR_DB_REPO }}:latest
