@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-push-frontend:
+  build-and-push-backend:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -22,7 +22,7 @@ jobs:
           tagname: 'backend'
           token: ${{ secrets.GITHUB_TOKEN }}  # Pass the token here
           aws-region: 'us-east-2'
-          ecr-repo: ${{secrets.AWS_ECR_REPO}}
+          ecr-repo: ${{secrets.AWS_ECR_BE_REPO}}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
