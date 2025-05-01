@@ -17,4 +17,4 @@ RUN npm run build
 # RUN npm run devseed    // Uncomment this line if you want to prepopulate the database
 
 # Start the app
-CMD ["npm", "run" "start"]
+CMD ["npm", "run" ,"start"]
