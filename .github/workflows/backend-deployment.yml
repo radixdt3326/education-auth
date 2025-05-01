@@ -26,6 +26,9 @@ jobs:
             # Remove all the unused images
             docker image prune -a -f
 
+            # Remove all unused containers
+            docker container prune -f
+
             # Pull the latest image
             docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-2.amazonaws.com/${{secrets.AWS_ECR_BE_REPO}}:latest
 
