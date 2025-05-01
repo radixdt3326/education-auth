@@ -20,8 +20,11 @@ jobs:
               docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-2.amazonaws.com
 
             # Stop and remove existing container on port 80 (optional)
-            docker ps -q --filter "publish=3000" | grep -q . && docker stop $(docker ps -q --filter "publish=80") || echo "No container on port 80"
-            docker ps -a -q --filter "publish=3000" | grep -q . && docker rm $(docker ps -a -q --filter "publish=80") || echo "No stopped container on port 80"
+            docker ps -q --filter "publish=3000" | grep -q . && docker stop $(docker ps -q --filter "publish=3000") || echo "No container on port 3000"
+            docker ps -a -q --filter "publish=3000" | grep -q . && docker rm $(docker ps -a -q --filter "publish=3000") || echo "No stopped container on port 3000"
+
+            # Remove all the unused images
+            docker image prune -a -f
 
             # Pull the latest image
             docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-2.amazonaws.com/${{secrets.AWS_ECR_BE_REPO}}:latest
