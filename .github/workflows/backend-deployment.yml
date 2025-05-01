@@ -29,8 +29,11 @@ jobs:
             # Remove all unused containers
             docker container prune -f
 
+            # create network
+            docker network create --driver bridge app-network
+
             # Pull the latest image
             docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-2.amazonaws.com/${{secrets.AWS_ECR_BE_REPO}}:latest
 
             # Run the container on port 80
-            docker run -d -p 3000:5000 --name my-backend ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-2.amazonaws.com/${{secrets.AWS_ECR_BE_REPO}}:latest
+            docker run -d -p 3000:5000 --name my-backend --network app-network -e DB_HOST=my-database -e DB_USER=admin -e DB_PASSWORD=adminpassword -e DB_NAME=my_database -e PORT=5000 -e DB_PORT=5432 ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-2.amazonaws.com/${{secrets.AWS_ECR_BE_REPO}}:latest
