@@ -68,7 +68,7 @@ export const removeToken = async function (DB : Pool ,sessionId : string) {
 	try {
         const query = `DELETE FROM session_table WHERE token = $1 RETURNING *;`;
         const result = await DB.query(query, [JSON.parse(sessionId)]);
-        if (result.rowCount > 0) {
+        if (result.rowCount  && result.rowCount > 0) {
             console.log(`✅ Session with token ${sessionId} remove successfully.`);
 			return true;
         } else {
