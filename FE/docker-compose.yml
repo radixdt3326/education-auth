@@ -6,14 +6,12 @@ services:
     container_name: nextjs-container
     restart: always
     ports:
-      - "6000:4000"  # Map container port to host port
+      - "3000:3000"  # Map container port to host port
     environment:
       - NEXT_PUBLIC_API_URL=http://localhost:5000/api/
+      - PORT=3000
     networks:
       - app-network
-    volumes:
-      - .:/app
-      - /app/node_modules
 
 networks:
   app-network:

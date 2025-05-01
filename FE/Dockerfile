@@ -17,11 +17,11 @@ COPY . .
 ENV NEXT_PUBLIC_API_URL=http://localhost:5000/api/
 
 # Build the Next.js application
-# RUN npm run build
+RUN npm run build
 
 
 # Expose the port your app will run on
-EXPOSE 4000
+EXPOSE 3000
 
 # Start the Next.js server
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "start"]
