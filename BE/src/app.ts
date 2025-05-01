@@ -27,6 +27,8 @@ app.use(httpLogger);
 app.use(cookieParser());
 app.use(helmet());
 
+app.get("/", (req,res)=>res.status(200).send("server is running on 5000"));
+
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, 
   max: 100, 
@@ -72,7 +74,7 @@ const swaggerOptions = {
 // const csrfProtection = CSRF({ cookie: true });
 // app.use(csrfProtection);
 
-app.get("/", (req,res)=>res.status(200).send("server is running on 4000"));
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
