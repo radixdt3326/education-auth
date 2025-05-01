@@ -6,7 +6,7 @@ import axios from 'axios';
 export default async function<T>(method : string, endpoint : string, data? : requestBody):Promise<T>{
 	const config = {
 		method: method,
-		url: apiBaseOrigin + endpoint,
+		url: apiBaseOrigin + endpoint? endpoint : "",
 		headers: {
 			// "X-CSRF" : "Y",
 			"X-SESSID" : localStorage.getItem("sessId"),
