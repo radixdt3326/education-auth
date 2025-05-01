@@ -1,0 +1,28 @@
+name: Backend ECR CI
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-push-frontend:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write  # Required for GHCR
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build & Create Package
+        id: build-docker-image
+        uses: ./.github/actions/ecr-ci
+        with:
+          folder: 'BE'
+          tagname: 'backend'
+          token: ${{ secrets.GITHUB_TOKEN }}  # Pass the token here
+          aws-region: 'us-east-2'
+          ecr-repo: ${{secrets.AWS_ECR_REPO}}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
