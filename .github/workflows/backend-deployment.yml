@@ -1,0 +1,30 @@
+name: Deploy backend from ECR to EC2
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy-backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user                # or ubuntu for Ubuntu AMIs
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script: |
+
+            aws ecr get-login-password --region us-east-2 | \
+              docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-2.amazonaws.com
+
+            # Stop and remove existing container on port 80 (optional)
+            docker ps -q --filter "publish=80" | grep -q . && docker stop $(docker ps -q --filter "publish=80") || echo "No container on port 80"
+            docker ps -a -q --filter "publish=80" | grep -q . && docker rm $(docker ps -a -q --filter "publish=80") || echo "No stopped container on port 80"
+
+            # Pull the latest image
+            docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-2.amazonaws.com/${{secrets.AWS_ECR_BE_REPO}}:latest
+
+            # Run the container on port 80
+            docker run -d -p 3000:3000 --name my-backend ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-2.amazonaws.com/${{secrets.AWS_ECR_BE_REPO}}:latest
