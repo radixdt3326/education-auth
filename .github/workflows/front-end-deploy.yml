@@ -37,4 +37,8 @@ jobs:
             docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-2.amazonaws.com/${{secrets.AWS_ECR_REPO}}:latest
 
             # Run the container on port 80
-            docker run -d -p 80:3000 --name frontend -e NEXT_PUBLIC_API_URL=http://${{ secrets.EC2_PRIVATE_HOST }}:3000/ -e PORT=3000 ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-2.amazonaws.com/${{secrets.AWS_ECR_REPO}}:latest
+            docker run -d -p 80:3000 \
+              --name frontend \
+              -e NEXT_PUBLIC_API_URL=http://${{ secrets.EC2_PUBLIC_HOST }}:3000/ \
+              -e PORT=3000 \
+              ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-2.amazonaws.com/${{secrets.AWS_ECR_REPO}}:latest
