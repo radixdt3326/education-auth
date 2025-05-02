@@ -13,6 +13,9 @@ RUN npm install
 # Copy the entire application
 COPY . .
 
+# Declare the build-time argument
+ARG NEXT_PUBLIC_API_URL
+
 # Set environment variables
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 
