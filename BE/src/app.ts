@@ -111,6 +111,7 @@ app.use(errorHandler);
 
 const port = process.env.PORT || '8000';
 app.set('port', port);
+app.set('host','0.0.0.0');
 
 const server = http.createServer(app);
 
