@@ -20,12 +20,8 @@ jobs:
               docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-2.amazonaws.com
 
             # Stop and remove existing container on port 80 (optional)
-            # docker ps -q --filter "name=frontend" | grep -q . && docker stop $(docker ps -q --filter "name=frontend") || echo "No container on port 80"
-            # docker ps -a -q --filter "name=frontend" | grep -q . && docker rm $(docker ps -a -q --filter "name=frontend") || echo "No stopped container on port 80"
-
-            docker stop frontend
-
-            docker rm frontend
+            # docker ps -q --filter "publice=80" | grep -q . && docker stop $(docker ps -q --filter "publice=80") || echo "No container on port 80"
+            # docker ps -a -q --filter "publice=80" | grep -q . && docker rm $(docker ps -a -q --filter "publice=80") || echo "No stopped container on port 80"
 
             # Remove all unused containers
             docker container prune -f
