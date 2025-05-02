@@ -10,8 +10,9 @@ const About: React.FC = ():JSX.Element => {
   const api = useApi()
 
   const getData = async () => {
-    const result = await api("GET", "public/about")
-    setData(result.message);
+    const result = await api("GET",);
+    console.log(result);
+    // setData(result.message);
   }
 
   useEffect(() => {

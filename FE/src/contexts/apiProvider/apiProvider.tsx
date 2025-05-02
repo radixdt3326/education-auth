@@ -55,7 +55,7 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
           localStorage.removeItem("sessId");
           localStorage.removeItem("userId");
           localStorage.removeItem("role");
-          window.location.href = "/";
+          // window.location.href = "/";
           reject(err);
         });
     });

@@ -4,9 +4,10 @@ import axios from 'axios';
 
 
 export default async function<T>(method : string, endpoint : string, data? : requestBody):Promise<T>{
+	const end = endpoint? endpoint : ""
 	const config = {
 		method: method,
-		url: apiBaseOrigin + endpoint? endpoint : "",
+		url: apiBaseOrigin + end,
 		headers: {
 			// "X-CSRF" : "Y",
 			"X-SESSID" : localStorage.getItem("sessId"),

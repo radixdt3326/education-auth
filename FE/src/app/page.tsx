@@ -43,12 +43,7 @@ const SignInPage: FC = ():JSX.Element => {
     return isValid;
   };
 
-  const getData = async () : Promise<void> => {
-    const result = await api("/");
-    console.log(result);
-  }
- 
-  useEffect(()=>{ getData();},[])
+
   useEffect(() => {
     isUserLogin()
   }, [JSON.stringify(myUserDetails)])
