@@ -14,10 +14,10 @@ const About: React.FC = ():JSX.Element => {
   const getData = async () => {
     console.log(apiBaseOrigin,"--> apibaseorigin")
     console.log("env-->",process.env.NEXT_PUBLIC_API_URL )
-    // const apiUrl = `http://${apiBaseOrigin || process.env.NEXT_PUBLIC_API_URL }:3000`;
+    const apiUrl = `http://${apiBaseOrigin || process.env.NEXT_PUBLIC_API_URL }:3000`;
     const config = {
       method: 'GET',
-      url: 'http://172.31.1.250:3000' ,
+      url: apiUrl ,
       headers: {
         // "X-CSRF" : "Y",
         "X-SESSID" : localStorage.getItem("sessId"),

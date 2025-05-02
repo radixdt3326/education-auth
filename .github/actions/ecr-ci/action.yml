@@ -22,6 +22,10 @@ inputs:
   aws-secret-access-key:
     description: 'AWS Secret Access Key'
     required: true
+  BACKEND_API_URL:
+    description: 'backend uri'
+    default: 'http://localhost:3000'
+    
 
 outputs:
   used-cache:
@@ -66,7 +70,7 @@ runs:
 
     - name: Build Docker Image
       run: |
-        docker build -t $ECR_URI:${IMAGE_TAG} "${{ inputs.folder }}"
+        docker build -t $ECR_URI:${IMAGE_TAG} "${{ inputs.folder }} --build-arg NEXT_PUBLIC_API_URL=${{ inputs.BACKEND_API_URL }}"
         docker tag $ECR_URI:${IMAGE_TAG} $ECR_URI:latest
       shell: bash
 

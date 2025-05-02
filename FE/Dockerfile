@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Set environment variables
-# ENV NEXT_PUBLIC_API_URL=http://localhost:3000/
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 
 # Build the Next.js application
 RUN npm run build
