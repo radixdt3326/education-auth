@@ -12,7 +12,9 @@ const About: React.FC = ():JSX.Element => {
   const api = useApi()
 
   const getData = async () => {
-    const apiUrl = `http://${apiBaseOrigin}:3000`;
+    console.log(apiBaseOrigin,"--> apibaseorigin")
+    console.log("env-->",process.env.NEXT_PUBLIC_API_URL )
+    const apiUrl = `http://${apiBaseOrigin || process.env.NEXT_PUBLIC_API_URL }:3000`;
     const config = {
       method: 'GET',
       url: apiUrl ,
