@@ -29,9 +29,6 @@ jobs:
             # Remove all unused containers
             docker container prune -f
 
-            # create network
-            docker network create --driver bridge app-network
-
             # Pull the latest image
             docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-2.amazonaws.com/${{secrets.AWS_ECR_BE_REPO}}:latest
 
