@@ -12,9 +12,10 @@ const About: React.FC = ():JSX.Element => {
   const api = useApi()
 
   const getData = async () => {
+    const apiUrl = `http://${apiBaseOrigin}:3000`;
     const config = {
       method: 'GET',
-      url: apiBaseOrigin ,
+      url: apiUrl ,
       headers: {
         // "X-CSRF" : "Y",
         "X-SESSID" : localStorage.getItem("sessId"),
