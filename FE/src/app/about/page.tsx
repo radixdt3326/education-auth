@@ -17,7 +17,7 @@ const About: React.FC = ():JSX.Element => {
     // const apiUrl = `http://${apiBaseOrigin || process.env.NEXT_PUBLIC_API_URL }:3000`;
     const config = {
       method: 'GET',
-      url: apiBaseOrigin ,
+      url: 'http://172.31.1.250:3000' ,
       headers: {
         // "X-CSRF" : "Y",
         "X-SESSID" : localStorage.getItem("sessId"),
