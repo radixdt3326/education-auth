@@ -38,7 +38,7 @@ app.use(limiter);
 
 app.use(
   cors({
-    origin: ["http://localhost:3000"], // Change to specific origin in production
+    origin: "*", // Change to specific origin in production
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization' , "x-sessid"],
     credentials: true,
@@ -109,7 +109,7 @@ const errorHandler: express.ErrorRequestHandler = (err, _req, res) => {
 };
 app.use(errorHandler);
 
-const port = process.env.PORT || '8000';
+const port = process.env.PORT || '5000';
 app.set('port', port);
 app.set('host','0.0.0.0');
 
