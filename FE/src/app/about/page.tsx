@@ -23,8 +23,8 @@ const About: React.FC = ():JSX.Element => {
         "X-SESSID" : "1234",
         'Authorization': 'test',
         'Content-Type': 'application/json',
-
       },
+      credentials:'include',
       data : {}
     };
     const result = await axios(config);
