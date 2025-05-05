@@ -38,7 +38,7 @@ app.use(limiter);
 
 app.use(
   cors({
-    origin: 'http://3.23.101.191//', // Change to specific origin in production
+    origin: 'http://3.23.101.191', // Change to specific origin in production
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization' , "x-sessid"],
     credentials:true
