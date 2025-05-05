@@ -41,7 +41,6 @@ app.use(
     origin: "*", // Change to specific origin in production
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization' , "x-sessid"],
-    credentials: true,
   })
 );
 
