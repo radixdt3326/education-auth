@@ -10,7 +10,7 @@ COPY package.json package-lock.json ./
 # Install dependencies
 RUN npm install
 
-RUN apk update && apk add --no-cache curl bas
+RUN apk add curl
 
 # Copy the entire application
 COPY . .
