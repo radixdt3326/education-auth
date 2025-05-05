@@ -7,7 +7,7 @@ import http from 'http';
 import helmet from "helmet";
 import rateLimit from 'express-rate-limit';
 import cron from "node-cron";
-// import cors from 'cors';
+import cors from 'cors';
 // import { toNodeHandler } from "better-auth/node";
 // import { auth } from './lib/auth';    s
 
@@ -36,14 +36,14 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-// app.use(
-//   cors({
-//     origin: "*", // Change to specific origin in production
-//     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-//     allowedHeaders: ['Content-Type', 'Authorization' , "x-sessid"],
-//     credentials: true,
-//   })
-// );
+app.use(
+  cors({
+    origin: "*", // Change to specific origin in production
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization' , "x-sessid"],
+    credentials: true,
+  })
+);
 
 const swaggerOptions = {
   definition: {

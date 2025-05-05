@@ -20,7 +20,10 @@ const About: React.FC = ():JSX.Element => {
       url: apiUrl ,
       headers: {
         // "X-CSRF" : "Y",
-        "X-SESSID" : localStorage.getItem("sessId"),
+        "X-SESSID" : "1234",
+        'Authorization': 'test',
+        'Content-Type': 'application/json',
+
       },
       data : {}
     };
