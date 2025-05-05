@@ -36,6 +36,6 @@ jobs:
             docker run -d -p 80:3000 \
               --name frontend \
               --network app-network \
-              -e NEXT_PUBLIC_API_URL=http://${{ secrets.EC2_PRIVATE_HOST }}:3000/ \
+              -e NEXT_PUBLIC_API_URL=${{ secrets.EC2_PRIVATE_HOST }}/ \
               -e PORT=3000 \
               ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-2.amazonaws.com/${{secrets.AWS_ECR_REPO}}:latest
