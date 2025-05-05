@@ -20,8 +20,8 @@ jobs:
               docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-2.amazonaws.com
 
             # Stop and remove existing container on port 80 (optional)
-            docker ps -q --filter "publish=3000" | grep -q . && docker stop $(docker ps -q --filter "publish=3000") || echo "No container on port 3000"
-            docker ps -a -q --filter "publish=3000" | grep -q . && docker rm $(docker ps -a -q --filter "publish=3000") || echo "No stopped container on port 3000"
+            docker ps -q --filter "name=my-backend" | grep -q . && docker stop $(docker ps -q --filter "name=my-backend") || echo "No container on port 3000"
+            docker ps -a -q --filter "name=my-backend" | grep -q . && docker rm $(docker ps -a -q --filter "name=my-backend") || echo "No stopped container on port 3000"
 
             # Remove all the unused images
             docker image prune -a -f
