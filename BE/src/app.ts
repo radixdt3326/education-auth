@@ -8,8 +8,6 @@ import helmet from "helmet";
 import rateLimit from 'express-rate-limit';
 import cron from "node-cron";
 import cors from 'cors';
-// import { toNodeHandler } from "better-auth/node";
-// import { auth } from './lib/auth';    s
 
 import { handleError } from './helpers/error';
 import httpLogger from './middlewares/httpLogger';
@@ -36,9 +34,11 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
+const allowedOrigins = process.env.CORS_ORIGINS?.split(",") || [];
+
 app.use(
   cors({
-    origin: 'http://3.23.101.191', // Change to specific origin in production
+    origin: allowedOrigins || ['http://3.23.101.191','http://localhost:3001'], // Change to specific origin in production
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization' , "x-sessid"],
     credentials:true
@@ -83,8 +83,6 @@ app.use(express.urlencoded({ extended: false }));
 
 // app.all("/api/auth/sign-in/social",  toNodeHandler(auth)); 
 app.use('/api', router);
-
-app.post("/api/auth", (req,res)=>console.log(req))
 
 app.get('/testpoint', (req,res)=>res.json({message : "I am up !"}));
 
@@ -155,12 +153,4 @@ server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 
-
-// // Below is the new version of server.ts with commented out code
-
-// import app from "./configs/appconfigs";
-// import swaggerRouter from "./configs/swaggerConfig";
-// import "./configs/cronJobs"; // Importing to run cron jobs
-
-// app.use(swaggerRouter);
 

@@ -1,6 +1,14 @@
 import express from 'express';
+import dotenv from 'dotenv';
+import aws from 'aws-sdk'
 import { Pool } from 'pg';
-import { isEmail, isSafeInput } from '../utils/common';
+import { isSafeInput } from '../utils/common';
+import { isSignedUrlUsed, markSignedUrlUsed, storeSignedUrlKey } from '../lib/redis';
+import crypto from 'crypto'
+import { promisify } from "util"
+const randomBytes = promisify(crypto.randomBytes)
+
+dotenv.config()
 
 /**
  * @swagger
@@ -66,3 +74,77 @@ export const getUserDashboard = async (req: express.Request, res: express.Respon
 
     return res.status(500).json({ message: "Internal server error !" });
 }
+
+export const getS3SecureUrl = async ( res: express.Response) => {
+
+    const region = process.env.REGION 
+    const bucketName = process.env.BUCKET_NAME 
+    const accessKeyId = process.env.AWS_ACCESS_ID
+    const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY
+
+    const rawBytes = await randomBytes(16)
+    const imageName = rawBytes.toString('hex')
+
+    const s3 = new aws.S3({
+        region,
+        accessKeyId,
+        secretAccessKey,
+        signatureVersion: 'v4'
+    })
+
+    const params = ({
+        Bucket: bucketName,
+        Key: imageName,
+        Expires: 120
+    })
+
+    try {
+        const uploadURL = await s3.getSignedUrlPromise('putObject', params);
+
+        if (uploadURL) {
+            try {
+
+                await storeSignedUrlKey(imageName, 120)
+                return res.status(200).json({
+                    signedUrl: uploadURL
+                });
+
+            } 
+            catch (err : unknown) {
+
+                console.log(err);
+                return res.status(500).json({ message: "Internal server error !" });
+
+            }
+        }
+        else{
+
+            return res.status(500).json({ message: "Internal aws issue : signedurl is not getting generate"});
+       
+        }
+
+    } catch (err: unknown) {
+
+        console.log(err);
+        return res.status(500).json({ message: "Internal server error !" });
+
+    }
+   
+}
+
+export const isS3URlUsed = async (req: express.Request, res: express.Response) => {
+
+    const { key } = req.body;
+
+    const alreadyUsed: boolean = await isSignedUrlUsed(key);
+
+    if (alreadyUsed) {
+        return res.status(400).json({ error: 'Signed URL already used.' });
+    }
+
+    await markSignedUrlUsed(key);
+
+    res.status(200).send('Marked as used');
+    
+}
+

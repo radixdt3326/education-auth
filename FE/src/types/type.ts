@@ -27,6 +27,10 @@ export interface ErrorObject {
     name : string;
   }
 
+  export interface signedurlResponse {
+    signedUrl: string
+  }
+  
   export interface AuthContextType {
     myUserDetails: myUserDetails;
     lastError: string;

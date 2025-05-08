@@ -16,7 +16,6 @@ export const isUserLoggedIn = async (req: express.Request, res: express.Response
 
         // console.log("checkdate-->", new Date(sessionData['expiry_date']));
 
-        if ((new Date(sessionData['expiry_date'])) < (new Date())) return res.status(403).json({ message: "Session is expired ! please login again" })
 
         next();
 

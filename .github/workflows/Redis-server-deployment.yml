@@ -1,0 +1,26 @@
+name: Configure Redis Server into EC2
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy-backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.EC2_BE_DB_HOST }}
+          username: ec2-user
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script: |
+
+            docker ps -q --filter "name=my-redis" | grep -q . && docker stop my-redis || echo "No Redis container to stop"
+            docker ps -a -q --filter "name=my-redis" | grep -q . && docker rm my-redis || echo "No Redis container to remove"
+            docker pull redis:latest
+            docker run -d \
+              --name my-redis \
+              --network app-network \
+              -p 6379:6379 \
+              redis:latest

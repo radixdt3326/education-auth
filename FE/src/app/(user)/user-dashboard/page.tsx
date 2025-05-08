@@ -1,15 +1,17 @@
 "use client";
 
-import { useEffect, useState , FC, JSX } from "react";
+import { useEffect, useState , FC, JSX, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { isUserloggedIn } from "@/utils/isLoggedin";
 import { useAuth } from "@/contexts/authProvider/authContext";
 import { useApi } from '@/contexts/apiProvider/apiContext'
 import "./user-dashboard.css"
-import { AuthContextType, myUserDetails } from "@/types/type";
+import { AuthContextType, myUserDetails, signedurlResponse } from "@/types/type";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import axios from "axios";
 
 const Dashboard:FC = ():JSX.Element => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const router : AppRouterInstance = useRouter();
   const [user, setUser] = useState<myUserDetails | null>(null);
   const { logout } : Pick<AuthContextType, 'logout' > = useAuth();
@@ -19,6 +21,31 @@ const Dashboard:FC = ():JSX.Element => {
   const getData = async () : Promise<void> => {
     const result:myUserDetails = await api("GET", "user/user-dashboard/" + localStorage.getItem("userId"));
     setUser(result);
+  }
+
+  const uploadFiles = async (e: React.FormEvent) => {
+
+    e.preventDefault();
+
+    const urlJSON: signedurlResponse = await api("GET", "user/user-dashboard/getSecureurl");
+
+    const file = fileInputRef.current?.files?.[0];
+
+    if (!file) {
+      alert("Please select a file.");
+      return;
+    }
+
+    const res = await axios.put(urlJSON.signedUrl, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "multipart/form-data"
+      },
+      body: fileInputRef.current?.files?.[0] || ""
+    })
+
+    console.log(res);
+
   }
 
   useEffect(() => {
@@ -37,6 +64,12 @@ const Dashboard:FC = ():JSX.Element => {
       >
         Logout
       </button>
+
+      <form id="imageForm">
+        <input id="imageInput" type="file" ref={fileInputRef}  accept="image/*"/>
+          <button onClick={uploadFiles} >Upload</button>
+      </form>
+      
     </div>
   );
 };
