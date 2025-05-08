@@ -1,7 +1,7 @@
 const { exec } = require("child_process");
 const path = require("path");
 
-const folders = ["Db", "BE", "FE"];
+const folders = ["Db", "BE", "FE", "Redies"];
 
 folders.forEach((folder) => {
     const folderPath = path.join(__dirname, folder);
